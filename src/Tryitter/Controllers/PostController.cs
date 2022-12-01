@@ -40,15 +40,19 @@ namespace Tryitter.WebApi.Controllers
         {
             var studentId = GetGuidToken();
 
-            return Ok(await _postServices.CreatePost(toCreate, studentId));
+            var post = await _postServices.CreatePost(toCreate, studentId);
+
+            return Created($"/post/{post.Id}", post.Id);
         }
         [HttpPut]
         [Authorize(policy: "Student")]
-        public async Task<Post> Update(Post toUpdate)
+        public async Task<IActionResult> Update(Post toUpdate)
         {
             var studentId = GetGuidToken();
 
-            return await _postServices.UpdatePost(toUpdate, studentId);
+            var updatedPost = await _postServices.UpdatePost(toUpdate, studentId);
+            
+            return Ok(updatedPost);
         }
 
         [HttpDelete("{id:Guid}")]
