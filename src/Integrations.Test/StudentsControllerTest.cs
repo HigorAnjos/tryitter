@@ -60,9 +60,6 @@ namespace Integrations.Test
             };
 
             var studentJson = JsonConvert.SerializeObject(student);
-
-
-
             var requestContent = new StringContent(studentJson, Encoding.UTF8, "application/json");
             var response = await _client.PostAsync(url, requestContent);
             //var content = await response.Content.ReadFromJsonAsync<string>();
@@ -87,19 +84,51 @@ namespace Integrations.Test
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
-        //[Theory(DisplayName = "E possivel buscar dados do studante logado")]
-        //[InlineData("/Student")]
-        //public async Task GetStudentSuccess(string url)
-        //{
-        //    var student = AutoFaker.Generate<Student>();
-        //    var token = _tokenGenerator.GetToken(student);
+        [Theory(DisplayName = "E possivel buscar dados do studante logado")]
+        [InlineData("/student")]
+        public async Task GetStudentSuccess(string url)
+        {
+            var student = AutoFaker.Generate<Student>();
+            var token = new TokenGenerate().GetToken(student);
 
-        //    //_studentService.Setup(set => set.GetStudent(It.IsAny<Guid>())).ReturnsAsync(student);
-        //    //_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            _studentService.Setup(set => set.GetStudent(It.IsAny<Guid>())).ReturnsAsync(student);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        //    //var response = await _client.PostAsync(url, new StringContent("", Encoding.UTF8, "application/json"));
+            var response = await _client.GetAsync(url);
 
-        //    //response.StatusCode.Should().Be(HttpStatusCode.OK);
-        //}
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+        
+        [Theory(DisplayName = "E possivel atualizar os dados do studante logado")]
+        [InlineData("/student")]
+        public async Task PutUpdateSuccess(string url)
+        {
+            var student = AutoFaker.Generate<Student>();
+            var token = new TokenGenerate().GetToken(student);
+
+            _studentService.Setup(set => set.UpdateStudent(It.IsAny<Student>())).ReturnsAsync(student);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            
+            var studentJson = JsonConvert.SerializeObject(student);
+            var requestContent = new StringContent(studentJson, Encoding.UTF8, "application/json");
+            
+            var response = await _client.PutAsync(url, requestContent);
+            response.StatusCode.Should().Be(HttpStatusCode.Created);
+        }
+        
+        [Theory(DisplayName = "E possivel deletar a conta do estudante passado por parametro")]
+        [InlineData("/student")]
+        public async Task DeleteSuccess(string url)
+        {
+            var student = AutoFaker.Generate<Student>();
+            
+            var token = new TokenGenerate().GetToken(student);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            
+            _studentService.Setup(set => set.DeleteStudent(It.IsAny<Guid>())).ReturnsAsync(true);
+
+            var deleteResponse = await _client.DeleteAsync($"{url}/{student.Id}");
+            deleteResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        }
     }
 }
