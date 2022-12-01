@@ -106,13 +106,13 @@ namespace Integrations.Test
             var student = AutoFaker.Generate<Student>();
             var token = new TokenGenerate().GetToken(student);
 
-            _studentService.Setup(set => set.GetStudent(It.IsAny<Guid>())).ReturnsAsync(student);
+            _studentService.Setup(set => set.UpdateStudent(It.IsAny<Student>())).ReturnsAsync(student);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             
             var studentJson = JsonConvert.SerializeObject(student);
             var requestContent = new StringContent(studentJson, Encoding.UTF8, "application/json");
+            
             var response = await _client.PutAsync(url, requestContent);
-
             response.StatusCode.Should().Be(HttpStatusCode.Created);
         }
         
@@ -120,12 +120,12 @@ namespace Integrations.Test
         [InlineData("/student")]
         public async Task DeleteSuccess(string url)
         {
-            _studentService.Setup(set => set.Register(It.IsAny<Student>())).ReturnsAsync(true);
-            
             var student = AutoFaker.Generate<Student>();
             
             var token = new TokenGenerate().GetToken(student);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            
+            _studentService.Setup(set => set.DeleteStudent(It.IsAny<Guid>())).ReturnsAsync(true);
 
             var deleteResponse = await _client.DeleteAsync($"{url}/{student.Id}");
             deleteResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
