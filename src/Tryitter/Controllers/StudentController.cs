@@ -13,9 +13,9 @@ namespace Tryitter.WebApi.Controllers
     {
         private readonly IStudentServices _studentServices;
 
-        public StudentController(IStudentServices studentSerices)
+        public StudentController(IStudentServices studentServices)
         {
-            _studentServices = studentSerices;
+            _studentServices = studentServices;
         }
 
         [HttpPost("login")]
@@ -27,36 +27,36 @@ namespace Tryitter.WebApi.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Register([FromBody]Student ToCreate)
+        public async Task<IActionResult> Register([FromBody]Student toCreate)
         {
-            var isCreated = await _studentServices.Register(ToCreate);
+            var isCreated = await _studentServices.Register(toCreate);
 
             if (!isCreated)
             {
                 return BadRequest("Email ja cadastrado!");
             }
 
-            return Created("", ToCreate);
+            return Created("", toCreate);
         }
 
         [HttpGet]
         [Authorize(policy: "Student")]
         public async Task<IActionResult> GetStudent()
         {
-            if (User is null || User.Identity is null || User.Identity.Name is null)
+            if (User.Identity?.Name is null)
             {
                 return BadRequest();
             }
 
-            var Id = new Guid(User.Identity.Name);
-            return Ok(await _studentServices.GetStudent(Id));
+            var id = new Guid(User.Identity.Name);
+            return Ok(await _studentServices.GetStudent(id));
         }
 
         [HttpPut]
         [Authorize(policy: "Student")]
-        public async Task<IActionResult> Update(Student ToUpdate)
+        public async Task<IActionResult> Update(Student toUpdate)
         {
-            var isUpdated = await _studentServices.UpdateStudent(ToUpdate);
+            var isUpdated = await _studentServices.UpdateStudent(toUpdate);
             return Created("", isUpdated);
         }
 
