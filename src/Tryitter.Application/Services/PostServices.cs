@@ -15,25 +15,25 @@ namespace Tryitter.Application.Services
         {
             return _postRepository.CreatePost(post, studentId);
         }
-
-        public Task<bool> DeletePost(Guid postId, Guid studentId)
-        {
-            return _postRepository.DeletePost(postId, studentId);
-        }
-
+        
         public Task<IEnumerable<Post>> GetAllPost(Guid studentId)
         {
             return _postRepository.GetAllPost(studentId);
         }
-
+        
         public Task<Post> GetPostById(Guid postId, Guid studentId)
         {
             return _postRepository.GetPostById(postId, studentId);
         }
-
+        
         public Task<Post> UpdatePost(Post post, Guid studentId)
         {
             return _postRepository.UpdatePost(post, studentId);
+        }
+
+        public Task<bool> DeletePost(Guid postId, Guid studentId)
+        {
+            return _postRepository.DeletePost(postId, studentId);
         }
     }
 }
