@@ -27,37 +27,27 @@ namespace Tryitter.WebApi.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Register([FromBody]Student toCreate)
+        public async Task<IActionResult> Register([FromBody]Student student)
         {
-            var isCreated = await _studentServices.Register(toCreate);
-
-            if (!isCreated)
-            {
-                return BadRequest("Email ja cadastrado!");
-            }
-
-            return Created("", toCreate);
+            await _studentServices.Register(student);
+            
+            return Created($"/student/{student.Id}", student);
         }
 
         [HttpGet]
         [Authorize(policy: "Student")]
         public async Task<IActionResult> GetStudent()
         {
-            if (User.Identity?.Name is null)
-            {
-                return BadRequest();
-            }
-
-            var id = new Guid(User.Identity.Name);
+            var id = new Guid(User.Identity!.Name!);
             return Ok(await _studentServices.GetStudent(id));
         }
 
         [HttpPut]
         [Authorize(policy: "Student")]
-        public async Task<IActionResult> Update(Student toUpdate)
+        public async Task<IActionResult> Update(Student student)
         {
-            var isUpdated = await _studentServices.UpdateStudent(toUpdate);
-            return Created("", isUpdated);
+            var studentUpdated = await _studentServices.UpdateStudent(student);
+            return Created($"/student/{studentUpdated.Id}", studentUpdated);
         }
 
         [HttpDelete("{id:Guid}")]
