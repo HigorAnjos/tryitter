@@ -1,24 +1,15 @@
-using Xunit;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
-using System;
-using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
 using System.Text;
 using System.Net;
-using FluentAssertions.Common;
-using User.Infra.Context;
 using Microsoft.Extensions.DependencyInjection;
 using Tryitter.Domain.Entity;
 using Newtonsoft.Json;
-using System.Reflection;
 using Moq;
 using Tryitter.Application.Interfaces;
-using System.Net.Http.Json;
 using Tryitter.WebApi.ViewModels;
 using AutoBogus;
 using System.Net.Http.Headers;
-using System.Net.Http;
 using Tryitter.Application.Services.Auth;
 
 namespace Integrations.Test
@@ -50,14 +41,13 @@ namespace Integrations.Test
         {
             _studentService.Setup(set => set.Register(It.IsAny<Student>())).ReturnsAsync(true);
             
-            var student = new Student()
-            {
-                Name = "Student",
-                Email = "student@gmail.com",
-                Module = "CS",
-                Status = "Testando endpoint",
-                Password = "1234"
-            };
+            var student = new Student(
+               "Student",
+                "student@gmail.com",
+                "CS",
+                "Testando endpoint",
+                "12345"
+            );
 
             var studentJson = JsonConvert.SerializeObject(student);
             var requestContent = new StringContent(studentJson, Encoding.UTF8, "application/json");
@@ -103,7 +93,14 @@ namespace Integrations.Test
         [InlineData("/student")]
         public async Task PutUpdateSuccess(string url)
         {
-            var student = AutoFaker.Generate<Student>();
+            var student = new Student(
+                "Student",
+                "student@gmail.com",
+                "CS",
+                "Testando endpoint",
+                "12345"
+            );
+            
             var token = new TokenGenerate().GetToken(student);
 
             _studentService.Setup(set => set.UpdateStudent(It.IsAny<Student>())).ReturnsAsync(student);
@@ -113,7 +110,7 @@ namespace Integrations.Test
             var requestContent = new StringContent(studentJson, Encoding.UTF8, "application/json");
             
             var response = await _client.PutAsync(url, requestContent);
-            response.StatusCode.Should().Be(HttpStatusCode.Created);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
         
         [Theory(DisplayName = "E possivel deletar a conta do estudante passado por parametro")]

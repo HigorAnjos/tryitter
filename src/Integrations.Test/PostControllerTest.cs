@@ -42,7 +42,7 @@ public class PostControllerTest : IClassFixture<WebApplicationFactory<Program>>
         // insere o token no headers
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        var post = AutoFaker.Generate<Post>();
+        var post = new Post("Novo Post 2022");
         _postServices.Setup(service => service.CreatePost(It.IsAny<Post>(), It.IsAny<Guid>())).ReturnsAsync(post);
 
         var postJson = JsonConvert.SerializeObject(post);
@@ -62,7 +62,7 @@ public class PostControllerTest : IClassFixture<WebApplicationFactory<Program>>
         var token = new TokenGenerate().GetToken(student);
         // insere o token no headers
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-        
+
         //cria o post
         var post = AutoFaker.Generate<Post>();
         var postList = new List<Post> { post };
@@ -71,7 +71,7 @@ public class PostControllerTest : IClassFixture<WebApplicationFactory<Program>>
         var response = await _client.GetAsync(url);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
-    
+
     [Theory(DisplayName = "É possível buscar um post por meio do seu id")]
     [InlineData("/post")]
     public async Task GetOnePost(string url)
@@ -82,7 +82,7 @@ public class PostControllerTest : IClassFixture<WebApplicationFactory<Program>>
         var token = new TokenGenerate().GetToken(student);
         // insere o token no headers
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                
+
         //cria o post
         var post = AutoFaker.Generate<Post>();
         _postServices.Setup(set => set.GetPostById(It.IsAny<Guid>(), It.IsAny<Guid>())).ReturnsAsync(post);
@@ -90,7 +90,7 @@ public class PostControllerTest : IClassFixture<WebApplicationFactory<Program>>
         var response = await _client.GetAsync($"{url}/{post.Id}");
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
-    
+
     [Theory(DisplayName = "É possível editar um post por meio do seu id")]
     [InlineData("/post")]
     public async Task PutUpdate(string url)
@@ -101,18 +101,18 @@ public class PostControllerTest : IClassFixture<WebApplicationFactory<Program>>
         var token = new TokenGenerate().GetToken(student);
         // insere o token no headers
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                
+
         //cria o post
-        var post = AutoFaker.Generate<Post>();
+        var post = new Post("Novo Post 2022");
         _postServices.Setup(set => set.UpdatePost(It.IsAny<Post>(), It.IsAny<Guid>())).ReturnsAsync(post);
-        
+
         var postJson = JsonConvert.SerializeObject(post);
         var requestContent = new StringContent(postJson, Encoding.UTF8, "application/json");
 
         var response = await _client.PutAsync(url, requestContent);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
-    
+
     [Theory(DisplayName = "É possível deletar um post por meio do seu id")]
     [InlineData("/post")]
     public async Task DeletePost(string url)
@@ -123,11 +123,11 @@ public class PostControllerTest : IClassFixture<WebApplicationFactory<Program>>
         var token = new TokenGenerate().GetToken(student);
         // insere o token no headers
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                
+
         //cria o post
         var post = AutoFaker.Generate<Post>();
         _postServices.Setup(set => set.DeletePost(It.IsAny<Guid>(), It.IsAny<Guid>())).ReturnsAsync(true);
-        
+
         var response = await _client.DeleteAsync($"{url}/{post.Id}");
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
     }

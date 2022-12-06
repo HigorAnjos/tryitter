@@ -183,13 +183,15 @@ public class StudentsServiceTest
     {
         var student = AutoFaker.Generate<Student>();
         
+        var student2 = AutoFaker.Generate<Student>();
+        
         var repositoryMock = new Mock<IStudentRepository>();
 
         repositoryMock.Setup(x => x.GetStudentById(student.Id)).ReturnsAsync(student);
 
         var studentService = new StudentServices(_tokenGenerator.Object, repositoryMock.Object);
         
-        Func<Task> act = async () => await studentService.UpdateStudent(new Student());
+        Func<Task> act = async () => await studentService.UpdateStudent(student2);
         
         act.Should().ThrowAsync<Exception>().Result.WithMessage("Usuário não encontrado!");
         
