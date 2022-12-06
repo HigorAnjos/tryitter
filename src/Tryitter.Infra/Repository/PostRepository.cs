@@ -24,13 +24,10 @@ namespace Tryitter.Infra.Repository
 
             using (var connection = _context.CreateConnection())
             {
-                var PostIdCreated = await connection.ExecuteScalarAsync<Guid>(query, parameters);
-                var PostCreated = new Post()
-                {
-                    Message = ToCreate.Message,
-                    Id = PostIdCreated
-                };
-                return PostCreated;
+                await connection.ExecuteScalarAsync<Guid>(query, parameters);
+                var postCreated = new Post(ToCreate.Message);
+
+                return postCreated;
             }
         }
 
