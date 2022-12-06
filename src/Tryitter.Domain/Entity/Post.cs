@@ -1,14 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Flunt.Notifications;
+using Flunt.Validations;
 
 namespace Tryitter.Domain.Entity
 {
-    public class Post
+    public class Post : Notifiable<Notification>
     {
         public Guid Id { get; set; }
         public string Message { get; set; }
+        
+        public Post() {}
+        public Post(string message)
+        {
+            Id = Guid.NewGuid();
+            Message = message;
+            
+            Validate();
+        }
+
+        private void Validate()
+        {
+            var contract = new Contract<Post>()
+                .IsNotNullOrEmpty(Message, "Message")
+                .IsGreaterThan(Message, 10, "Message");
+            AddNotifications(contract);
+        }
     }
 }

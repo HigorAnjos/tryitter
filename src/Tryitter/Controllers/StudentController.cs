@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
 using Tryitter.Application.Interfaces;
 using Tryitter.Domain.Entity;
+using Tryitter.WebApi.Requests;
+using Tryitter.WebApi.Responses;
 using Tryitter.WebApi.ViewModels;
 
 namespace Tryitter.WebApi.Controllers
@@ -27,11 +28,29 @@ namespace Tryitter.WebApi.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Register([FromBody]Student student)
+        public async Task<IActionResult> Register(StudentRequest studentBody)
         {
+            var student = new Student(
+                studentBody.Name,
+                studentBody.Email,
+                studentBody.Module,
+                studentBody.Status,
+                studentBody.Password);
+
+            if (!student.IsValid)
+            {
+                var keyErrors = student.Notifications.Aggregate("", (current, studentNotification) => current + (studentNotification.Key + ", "));
+                var errorsMessage = student.Notifications.Aggregate("", (current, studentNotification) => current + (studentNotification.Message + ", "));
+
+                return Problem(
+                    title: keyErrors,
+                    statusCode: 400,
+                    detail: errorsMessage);
+            }
+
             await _studentServices.Register(student);
-            
-            return Created($"/student/{student.Id}", student);
+
+            return Created($"/student/{student.Id}", student.Id);
         }
 
         [HttpGet]
@@ -39,15 +58,53 @@ namespace Tryitter.WebApi.Controllers
         public async Task<IActionResult> GetStudent()
         {
             var id = new Guid(User.Identity!.Name!);
-            return Ok(await _studentServices.GetStudent(id));
+
+            var studentFound = await _studentServices.GetStudent(id);
+
+            var studentResponse = new StudentResponse(
+                studentFound.Id,
+                studentFound.Name,
+                studentFound.Email,
+                studentFound.Module,
+                studentFound.Status);
+
+            return Ok(studentResponse);
         }
 
         [HttpPut]
         [Authorize(policy: "Student")]
-        public async Task<IActionResult> Update(Student student)
+        public async Task<IActionResult> Update(StudentRequest studentBody)
         {
-            var studentUpdated = await _studentServices.UpdateStudent(student);
-            return Created($"/student/{studentUpdated.Id}", studentUpdated);
+            var student = new Student(
+                studentBody.Name,
+                studentBody.Email,
+                studentBody.Module,
+                studentBody.Status,
+                studentBody.Password);
+            
+            student.EditInfo(studentBody.Name, studentBody.Module, studentBody.Status, studentBody.Password);
+            
+            if (!student.IsValid)
+            {
+                var keyErrors = student.Notifications.Aggregate("", (current, studentNotification) => current + (studentNotification.Key + ", "));
+                var errorsMessage = student.Notifications.Aggregate("", (current, studentNotification) => current + (studentNotification.Message + ", "));
+
+                return Problem(
+                    title: keyErrors,
+                    statusCode: 400,
+                    detail: errorsMessage);
+            }
+
+            var studentFound = await _studentServices.UpdateStudent(student);
+
+            var studentResponse = new StudentResponse(
+                studentFound.Id,
+                studentFound.Name,
+                studentFound.Email,
+                studentFound.Module,
+                studentFound.Status);
+
+            return Ok(studentResponse);
         }
 
         [HttpDelete("{id:Guid}")]
