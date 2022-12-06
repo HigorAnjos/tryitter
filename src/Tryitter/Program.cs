@@ -1,10 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.DataProtection.KeyManagement;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Tryitter.WebApi;
-using static Dapper.SqlMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,6 +45,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseExceptionHandler("/error");
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
@@ -58,4 +57,4 @@ app.MapControllers();
 
 app.Run();
 
-public partial class Program { }
+public partial class Program {}
