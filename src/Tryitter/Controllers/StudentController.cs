@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Tryitter.Application.Interfaces;
 using Tryitter.Domain.Entity;
 using Tryitter.WebApi.Requests;
+using Tryitter.WebApi.Responses;
 using Tryitter.WebApi.ViewModels;
 
 namespace Tryitter.WebApi.Controllers
