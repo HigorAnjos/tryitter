@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tryitter.Application.Interfaces;
+﻿using Tryitter.Application.Interfaces;
 using Tryitter.Domain.Entity;
 using Tryitter.Domain.Repository;
 
@@ -19,45 +14,65 @@ namespace Tryitter.Application.Services
             _tokenGenerator = tokenGenerator;
             _studentRepository = studentRepository;
         }
-
-        public Task<bool> DeleteStudent(Guid StudentId)
+        
+        public async Task<bool> Register(Student student)
         {
-            return _studentRepository.DeleteStudent(StudentId);
-        }
+            var hasEmail = await _studentRepository.GetStudentByEmail(student.Email);
 
-        public Task<Student> GetStudent(Guid Id)
-        {
-            return _studentRepository.GetStudentById(Id);
-        }
-
-        public async Task<string> Login(string Email, string Password)
-        {
-            // pegar no banco
-            var studentFound = await _studentRepository.GetStudentByEmail(Email);
-            // verifica a senha
-            if (studentFound.Password != Password)
-            {
-                return "usuario nao cadastrado";
-            }
-            // retornar o token
-            return _tokenGenerator.GetToken(studentFound);
-        }
-
-        public async Task<bool> Register(Student ToCreate)
-        {
-            var hasEmail = await _studentRepository.GetStudentByEmail(ToCreate.Email);
-            
             if (hasEmail is not null)
             {
-                return false;
+                throw new Exception("Email ja cadastrado!");
+            }
+
+            return await _studentRepository.CreateStudent(student);
+        }
+        
+        public async Task<string> Login(string email, string password)
+        {
+            var studentFound = await _studentRepository.GetStudentByEmail(email);
+            
+            if (studentFound == null || studentFound.Password != password)
+            {
+                throw new Exception("E-mail e/ou senha inválidos!");
             }
             
-            return await _studentRepository.CreateStudent(ToCreate);
+            return _tokenGenerator.GetToken(studentFound);
+        }
+        
+        public async Task<Student> GetStudent(Guid studentId)
+        {
+            var studentFound = await _studentRepository.GetStudentById(studentId);
+            
+            if (studentFound is null)
+            {
+                throw new Exception("Usuário não encontrado!");
+            }
+
+            return studentFound;
+        }
+        
+        public async Task<Student> UpdateStudent(Student student)
+        {
+            var studentFound = await _studentRepository.GetStudentById(student.Id);
+            
+            if (studentFound is null)
+            {
+                throw new Exception("Usuário não encontrado!");
+            }
+
+            return await _studentRepository.UpdateStudent(student);
         }
 
-        public Task<Student> UpdateStudent(Student ToUpdate)
+        public async Task<bool> DeleteStudent(Guid studentId)
         {
-            return _studentRepository.UpdateStudent(ToUpdate);
+            var studentFound = await _studentRepository.GetStudentById(studentId);
+            
+            if (studentFound is null)
+            {
+                throw new Exception("Usuário não encontrado!");
+            }
+            
+            return await _studentRepository.DeleteStudent(studentId);
         }
     }
 }

@@ -11,29 +11,29 @@ namespace Tryitter.Application.Services
         {
             _postRepository = postRepository;
         }
-        public Task<Post> CreatePost(Post ToCreate, Guid StudentId)
+        public Task<Post> CreatePost(Post post, Guid studentId)
         {
-            return _postRepository.CreatePost(ToCreate, StudentId);
+            return _postRepository.CreatePost(post, studentId);
+        }
+        
+        public Task<IEnumerable<Post>> GetAllPost(Guid studentId)
+        {
+            return _postRepository.GetAllPost(studentId);
+        }
+        
+        public Task<Post> GetPostById(Guid postId, Guid studentId)
+        {
+            return _postRepository.GetPostById(postId, studentId);
+        }
+        
+        public Task<Post> UpdatePost(Post post, Guid studentId)
+        {
+            return _postRepository.UpdatePost(post, studentId);
         }
 
-        public Task<bool> DeletePost(Guid PostId, Guid StudentId)
+        public Task<bool> DeletePost(Guid postId, Guid studentId)
         {
-            return _postRepository.DeletePost(PostId, StudentId);
-        }
-
-        public Task<IEnumerable<Post>> GetAllPost(Guid StudentId)
-        {
-            return _postRepository.GetAllPost(StudentId);
-        }
-
-        public Task<Post> GetPostById(Guid PostId, Guid StudentId)
-        {
-            return _postRepository.GetPostById(PostId, StudentId);
-        }
-
-        public Task<Post> UpdatePost(Post ToUpdate, Guid StudentId)
-        {
-            return _postRepository.UpdatePost(ToUpdate, StudentId);
+            return _postRepository.DeletePost(postId, studentId);
         }
     }
 }
