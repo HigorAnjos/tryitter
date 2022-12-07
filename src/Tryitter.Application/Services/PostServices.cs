@@ -1,4 +1,5 @@
-﻿using Tryitter.Application.Interfaces;
+﻿using Microsoft.AspNetCore.Http;
+using Tryitter.Application.Interfaces;
 using Tryitter.Domain.Entity;
 using Tryitter.Domain.Repository;
 
@@ -15,62 +16,48 @@ namespace Tryitter.Application.Services
 
         public Task<Post> CreatePost(Post post, Guid studentId)
         {
-            try
-            {
-                return _postRepository.CreatePost(post, studentId);
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
+            return _postRepository.CreatePost(post, studentId);
         }
 
         public Task<IEnumerable<Post>> GetAllPost(Guid studentId)
         {
-            try
-            {
-                return _postRepository.GetAllPost(studentId);
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
+            return _postRepository.GetAllPost(studentId);
         }
 
-        public Task<Post> GetPostById(Guid postId, Guid studentId)
+        public async Task<Post> GetPostById(Guid postId, Guid studentId)
         {
-            try
+            var postFound = await _postRepository.GetPostById(postId, studentId);
+
+            if (postFound is null)
             {
-                return _postRepository.GetPostById(postId, studentId);
+                throw new BadHttpRequestException("Post não encontrado!");
             }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
+
+            return postFound;
         }
 
-        public Task<Post> UpdatePost(Post post, Guid studentId)
+        public async Task<Post> UpdatePost(Post post, Guid studentId)
         {
-            try
+            var postFound = await _postRepository.GetPostById(post.Id, studentId);
+
+            if (postFound is null)
             {
-                return _postRepository.UpdatePost(post, studentId);
+                throw new BadHttpRequestException("Post não encontrado!");
             }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
+
+            return await _postRepository.UpdatePost(post, studentId);
         }
 
-        public Task<bool> DeletePost(Guid postId, Guid studentId)
+        public async Task<bool> DeletePost(Guid postId, Guid studentId)
         {
-            try
+            var postFound = await _postRepository.GetPostById(postId, studentId);
+
+            if (postFound is null)
             {
-                return _postRepository.DeletePost(postId, studentId);
+                throw new BadHttpRequestException("Post não encontrado!");
             }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
+
+            return await _postRepository.DeletePost(postId, studentId);
         }
     }
 }

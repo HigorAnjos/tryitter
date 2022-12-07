@@ -15,8 +15,8 @@ public class ErrorController : ControllerBase
         return exception switch
         {
             BadHttpRequestException => Problem(title: exception.Message, statusCode: 400),
-            AggregateException => Problem(title: "Database connection problem", statusCode: 500),
-            SqlException => Problem(title: "Database connection problem", statusCode: 500),
+            AggregateException => Problem(title: "Database connection problem", statusCode: 500, detail:exception?.Message),
+            SqlException => Problem(title: "Database connection problem", statusCode: 500, detail:exception?.Message),
             _ => Problem(title: "Something went wrong!", statusCode: 500, detail:exception?.Message)
         };
     }

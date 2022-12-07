@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Tryitter.Application.Interfaces;
 using Tryitter.Domain.Entity;
+using Tryitter.WebApi.Responses;
 
 namespace Tryitter.WebApi.Controllers
 {
@@ -21,8 +22,12 @@ namespace Tryitter.WebApi.Controllers
         public async Task<IActionResult> GetOne(Guid id)
         {
             var studentId = new Guid(User.Identity!.Name!);
+            
+            var postFound = await _postServices.GetPostById(id, studentId);
 
-            return Ok(await _postServices.GetPostById(id, studentId));
+            var postResponse = new PostResponse(postFound.Id, postFound.Message);
+
+            return Ok(postResponse);
         }
 
         [HttpGet]
@@ -30,8 +35,12 @@ namespace Tryitter.WebApi.Controllers
         public async Task<IActionResult> GetAll()
         {
             var studentId = new Guid(User.Identity!.Name!);
+            
+            var postFound = await _postServices.GetAllPost(studentId);
 
-            return Ok(await _postServices.GetAllPost(studentId));
+            var postResponse = postFound.Select(p => new PostResponse(p.Id, p.Message));
+
+            return Ok(postResponse);
         }
 
         [HttpPost]
@@ -40,13 +49,13 @@ namespace Tryitter.WebApi.Controllers
         {
             var studentId = new Guid(User.Identity!.Name!);
 
-            var postToCreate = new Post(postBody.Message);
+            postBody.EditInfo(postBody.Id, postBody.Message);
 
-            if (!postToCreate.IsValid)
+            if (!postBody.IsValid)
             {
-                var keyErrors = postToCreate.Notifications.Aggregate("",
+                var keyErrors = postBody.Notifications.Aggregate("",
                     (current, studentNotification) => current + (studentNotification.Key + ", "));
-                var errorsMessage = postToCreate.Notifications.Aggregate("",
+                var errorsMessage = postBody.Notifications.Aggregate("",
                     (current, studentNotification) => current + (studentNotification.Message + ", "));
 
                 return Problem(
@@ -55,7 +64,7 @@ namespace Tryitter.WebApi.Controllers
                     detail: errorsMessage);
             }
 
-            var post = await _postServices.CreatePost(postToCreate, studentId);
+            var post = await _postServices.CreatePost(postBody, studentId);
 
             return Created($"/post/{post.Id}", post.Id);
         }
@@ -66,13 +75,11 @@ namespace Tryitter.WebApi.Controllers
         {
             var studentId = new Guid(User.Identity!.Name!);
 
-            var postToUpdate = new Post(postBody.Message);
-
-            if (!postToUpdate.IsValid)
+            if (!postBody.IsValid)
             {
-                var keyErrors = postToUpdate.Notifications.Aggregate("",
+                var keyErrors = postBody.Notifications.Aggregate("",
                     (current, studentNotification) => current + (studentNotification.Key + ", "));
-                var errorsMessage = postToUpdate.Notifications.Aggregate("",
+                var errorsMessage = postBody.Notifications.Aggregate("",
                     (current, studentNotification) => current + (studentNotification.Message + ", "));
 
                 return Problem(
@@ -81,9 +88,11 @@ namespace Tryitter.WebApi.Controllers
                     detail: errorsMessage);
             }
 
-            var updatedPost = await _postServices.UpdatePost(postToUpdate, studentId);
+            var updatedPost = await _postServices.UpdatePost(postBody, studentId);
 
-            return Ok(updatedPost);
+            var postResponse = new PostResponse(updatedPost.Id, updatedPost.Message);
+
+            return Ok(postResponse);
         }
 
         [HttpDelete("{id:Guid}")]

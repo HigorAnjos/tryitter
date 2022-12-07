@@ -26,6 +26,18 @@ namespace Tryitter.Domain.Entity
             Validate();
         }
         
+        public Student(Guid id, string name, string email, string module, string status, string password)
+        {
+            Id = id;
+            Name = name;
+            Email = email;
+            Module = module;
+            Status = status;
+            Password = password;
+            
+            Validate();
+        }
+
         private void Validate()
         {
             var contract = new Contract<Student>()

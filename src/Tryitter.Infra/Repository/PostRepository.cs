@@ -67,19 +67,19 @@ namespace Tryitter.Infra.Repository
             }
         }
 
-        public async Task<Post> UpdatePost(Post ToUpdate, Guid StudentId)
+        public async Task<Post> UpdatePost(Post postToUpdate, Guid studentId)
         {
-            var query = "UPDATE Post SET Message = @Message OUTPUT inserted.Id, inserted.Message WHERE Student_Id = @StudentID AND Id = @Id";
+            const string query = "UPDATE Post SET Message = @Message WHERE Student_Id = @StudentID AND Id = @Id";
 
             var parameters = new DynamicParameters();
-            parameters.Add("Id", ToUpdate.Id, DbType.Guid);
-            parameters.Add("Message", ToUpdate.Message, DbType.String);
-            parameters.Add("StudentID", StudentId, DbType.Guid);
+            parameters.Add("Id", postToUpdate.Id, DbType.Guid);
+            parameters.Add("Message", postToUpdate.Message, DbType.String);
+            parameters.Add("StudentID", studentId, DbType.Guid);
 
             using (var connection = _context.CreateConnection())
             {
-                var postUpdated = await connection.QuerySingleOrDefaultAsync<Post>(query, parameters);
-                return postUpdated;
+                await connection.ExecuteAsync(query, parameters);
+                return postToUpdate;
             }
         }
     }

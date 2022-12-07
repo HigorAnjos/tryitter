@@ -16,6 +16,14 @@ namespace Tryitter.Domain.Entity
             
             Validate();
         }
+        
+        public void EditInfo(Guid id, string message)
+        {
+            Id = id;
+            Message = message;
+            
+            Validate();
+        }
 
         private void Validate()
         {
