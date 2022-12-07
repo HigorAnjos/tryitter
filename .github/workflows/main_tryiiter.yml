@@ -34,14 +34,6 @@ jobs:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
 
-      # - name: App Settings Variable Substitution
-      #   uses: microsoft/variable-substitution@v1
-      #   with:
-      #     files: '${{env.DOTNET_ROOT}}/myapp/src/Tryitter/appsettings.json'
-      #   env:
-      #     __SQLCONNECTION__: ${{ secrets.SQLCONNECTION }}
-
-
   deploy:
     runs-on: windows-latest
     needs: build
@@ -61,5 +53,5 @@ jobs:
         with:
           app-name: 'tryiiter'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_93E1898812F845E7A2C9C68F4D6BF65D }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_25696163DA92411BBA22F2EBDB8E4439 }}
           package: .
