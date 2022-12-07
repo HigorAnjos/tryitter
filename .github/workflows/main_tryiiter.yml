@@ -29,7 +29,7 @@ jobs:
         env:
           username: __SQLCONNECTION__
           password: ${{ secrets.SQLCONNECTION }}
-          url: https://github.com/o-desafio-tema-1-tryitter
+          url: https://github.com/higoranjos/o-desafio-tema-1-tryitter
 
       - name: Build with dotnet
         run: dotnet build --configuration Release
