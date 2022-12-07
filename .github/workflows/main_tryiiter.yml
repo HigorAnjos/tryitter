@@ -25,7 +25,7 @@ jobs:
       - name: App Settings Variable Substitution
         uses: microsoft/variable-substitution@v1
         with:
-          files: '${{env.DOTNET_ROOT}}\o-desafio-tema-1-tryitter\src\Tryitter\appsettings.json'
+          files: 'C:\Program Files\Git\o-desafio-tema-1-tryitter\src\Tryitter\appsettings.json'
         env:
           __SQLCONNECTION__: ${{ secrets.SQLCONNECTION }}
           # url: https://github.com/higoranjos/o-desafio-tema-1-tryitter
