@@ -40,7 +40,7 @@ jobs:
           files: './src/Tryitter/appsettings.json'
         env:
           username: __SQLCONNECTION__
-          password: ${{ PRD.SQLCONNECTION }}
+          password: ${{ secrets.SQLCONNECTION }}
           url: https://github.com/${{github.o-desafio-tema-1-tryitter}}
 
   deploy:
