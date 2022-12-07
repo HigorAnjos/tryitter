@@ -75,14 +75,16 @@ namespace Tryitter.WebApi.Controllers
         [Authorize(policy: "Student")]
         public async Task<IActionResult> Update(StudentRequest studentBody)
         {
+            var id = new Guid(User.Identity!.Name!);
+
             var student = new Student(
+                id,
                 studentBody.Name,
                 studentBody.Email,
                 studentBody.Module,
                 studentBody.Status,
-                studentBody.Password);
-            
-            student.EditInfo(studentBody.Name, studentBody.Module, studentBody.Status, studentBody.Password);
+                studentBody.Password
+            );
             
             if (!student.IsValid)
             {
@@ -111,6 +113,13 @@ namespace Tryitter.WebApi.Controllers
         [Authorize(policy: "Student")]
         public async Task<IActionResult> Delete(Guid id)
         {
+            var authenticatedUserid = new Guid(User.Identity!.Name!);
+
+            if (authenticatedUserid != id)
+            {
+                return Problem(statusCode: 403);
+            }
+            
             await _studentServices.DeleteStudent(id);
             return NoContent();
         }
