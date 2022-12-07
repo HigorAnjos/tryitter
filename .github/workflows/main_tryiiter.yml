@@ -33,6 +33,15 @@ jobs:
         with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
+        
+      - name: Replace
+        uses: microsoft/variable-substitution@v1 
+        with:
+          files: './src/Tryitter/appsettings.json'
+        env:
+          username: __SQLCONNECTION__
+          password: ${{ PRD.SQLCONNECTION }}
+          url: https://github.com/${{github.o-desafio-tema-1-tryitter}}
 
   deploy:
     runs-on: windows-latest
