@@ -25,7 +25,7 @@ jobs:
       - name: App Settings Variable Substitution
         uses: microsoft/variable-substitution@v1
         with:
-          files: '${{env.DOTNET_ROOT}}/Tryitter/appsettings.json'
+          files: '${{env.DOTNET_ROOT}}/src/Tryitter/appsettings.json'
         env:
           username: __SQLCONNECTION__
           SqlConnection: ${{ secrets.SQLCONNECTION }}
