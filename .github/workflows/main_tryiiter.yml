@@ -26,22 +26,20 @@ jobs:
         run: dotnet build --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}\src\Tryitter
-
-      - name: App Settings Variable Substitution
-        uses: microsoft/variable-substitution@v1
-        with:
-          files: '${{env.DOTNET_ROOT}}\myapp\src\Tryitter\appsettings.json'
-        env:
-          __SQLCONNECTION__: ${{ secrets.SQLCONNECTION }}
-          # url: https://github.com/higoranjos/o-desafio-tema-1-tryitter
-          # url: https://github.com/higoranjos${{github.o-desafio-tema-1-tryitter}}
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
+
+      - name: App Settings Variable Substitution
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: '${{env.DOTNET_ROOT}}/myapp/src/Tryitter/appsettings.json'
+        env:
+          __SQLCONNECTION__: ${{ secrets.SQLCONNECTION }}
 
 
   deploy:
