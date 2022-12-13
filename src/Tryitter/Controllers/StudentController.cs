@@ -66,7 +66,8 @@ namespace Tryitter.WebApi.Controllers
                 studentFound.Name,
                 studentFound.Email,
                 studentFound.Module,
-                studentFound.Status);
+                studentFound.Status,
+                studentFound.Role);
 
             return Ok(studentResponse);
         }
@@ -104,7 +105,8 @@ namespace Tryitter.WebApi.Controllers
                 studentFound.Name,
                 studentFound.Email,
                 studentFound.Module,
-                studentFound.Status);
+                studentFound.Status,
+                studentFound.Role);
 
             return Ok(studentResponse);
         }

@@ -16,6 +16,7 @@ builder.Services.ConfigureDependencies();
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("Student", policy => policy.RequireClaim("Student"));
+    options.AddPolicy("Admin", policy => policy.RequireClaim("Admin"));
 });
 
 var key = Encoding.ASCII.GetBytes("alshdjkfhalsdjfhlasdjfhlasdj");
