@@ -75,5 +75,11 @@ namespace Tryitter.Application.Services
 
             return await _studentRepository.DeleteStudent(studentId);
         }
+
+        public async Task<IEnumerable<Student>> GetAllStudents()
+        {
+            var students = await _studentRepository.GetAllStudents();
+            return students;
+        }
     }
 }

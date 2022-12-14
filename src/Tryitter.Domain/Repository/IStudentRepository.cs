@@ -9,5 +9,6 @@ namespace Tryitter.Domain.Repository
         public Task<Student> UpdateStudent(Student Student);
         public Task<bool> DeleteStudent(Guid StudentId);
         public Task<bool> CreateStudent(Student Student);
-    }
+        public Task<IEnumerable<Student>> GetAllStudents();
+  }
 }

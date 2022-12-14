@@ -28,10 +28,17 @@ namespace Tryitter.Application.Services.Auth
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.Name, Student.Id.ToString()),
+                    new Claim(ClaimTypes.Role, Student.Role),
                 })
             };
 
-            tokenDescriptor.Claims.Add("Student", true);
+            tokenDescriptor.Claims.Add(ClaimTypes.Name, Student.Id.ToString());
+            tokenDescriptor.Claims.Add(Student.Role, true);
+
+            if (Student.Role != "Student")
+            {
+                tokenDescriptor.Claims.Add("Student", true);
+            }
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
 

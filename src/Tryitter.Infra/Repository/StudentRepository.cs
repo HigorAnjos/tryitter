@@ -96,5 +96,16 @@ namespace Tryitter.Infra.Repository
                 return Student;
             }
         }
+
+        public async Task<IEnumerable<Student>> GetAllStudents()
+        {
+            var query = "SELECT Id, Name, Email, Module, Status, role FROM Student";
+
+            using(var connection = _context.CreateConnection())
+            {
+                var students = await connection.QueryAsync<Student>(query);
+                return students;
+            }
+        }
     }
 }

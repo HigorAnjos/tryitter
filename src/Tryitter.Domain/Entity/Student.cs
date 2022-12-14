@@ -11,7 +11,7 @@ namespace Tryitter.Domain.Entity
         public string Module { get; set; }
         public string Status { get; set; }
         public string Password { get; set; }
-        
+        public string Role { get; set; }
         public Student() {}
         
         public Student(string name, string email, string module, string status, string password)
@@ -35,6 +35,19 @@ namespace Tryitter.Domain.Entity
             Status = status;
             Password = password;
             
+            Validate();
+        }
+
+        public Student(Guid id, string name, string email, string module, string status, string password, string role)
+        {
+            Id = id;
+            Name = name;
+            Email = email;
+            Module = module;
+            Status = status;
+            Password = password;
+            Role = role;
+
             Validate();
         }
 

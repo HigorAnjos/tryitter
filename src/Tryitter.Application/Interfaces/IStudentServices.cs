@@ -9,5 +9,6 @@ namespace Tryitter.Application.Interfaces
         public Task<Student> GetStudent(Guid Id);
         public Task<Student> UpdateStudent(Student ToUpdate);
         public Task<bool> DeleteStudent(Guid Id);
+        public Task<IEnumerable<Student>> GetAllStudents();
     }
 }
