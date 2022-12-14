@@ -35,7 +35,8 @@ namespace Tryitter.WebApi.Controllers
                 studentBody.Email,
                 studentBody.Module,
                 studentBody.Status,
-                studentBody.Password);
+                studentBody.Password,
+                studentBody.Role);
 
             if (!student.IsValid)
             {
