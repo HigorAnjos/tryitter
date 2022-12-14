@@ -42,11 +42,12 @@ namespace Integrations.Test
             _studentService.Setup(set => set.Register(It.IsAny<Student>())).ReturnsAsync(true);
             
             var student = new Student(
-               "Student",
+               "John Doe",
                 "student@gmail.com",
                 "CS",
                 "Testando endpoint",
-                "12345"
+                "12345",
+               "Student"
             );
 
             var studentJson = JsonConvert.SerializeObject(student);
