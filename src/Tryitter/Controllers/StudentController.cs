@@ -78,14 +78,15 @@ namespace Tryitter.WebApi.Controllers
         {
             var id = new Guid(User.Identity!.Name!);
 
-            var student = new Student(
+            var student = new Student();
+            
+            student.EditInfo(
                 id,
                 studentBody.Name,
                 studentBody.Email,
                 studentBody.Module,
                 studentBody.Status,
-                studentBody.Password
-            );
+                studentBody.Password);
             
             if (!student.IsValid)
             {
