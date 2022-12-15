@@ -42,11 +42,12 @@ namespace Integrations.Test
             _studentService.Setup(set => set.Register(It.IsAny<Student>())).ReturnsAsync(true);
             
             var student = new Student(
-               "Student",
+               "John Doe",
                 "student@gmail.com",
                 "CS",
                 "Testando endpoint",
-                "12345"
+                "12345",
+               "Student"
             );
 
             var studentJson = JsonConvert.SerializeObject(student);
@@ -94,11 +95,13 @@ namespace Integrations.Test
         public async Task PutUpdateSuccess(string url)
         {
             var student = new Student(
+                Guid.NewGuid(), 
                 "Student",
                 "student@gmail.com",
                 "CS",
                 "Testando endpoint",
-                "12345"
+                "12345",
+                "Student"
             );
             
             var token = new TokenGenerate().GetToken(student);

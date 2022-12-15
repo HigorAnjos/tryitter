@@ -16,7 +16,7 @@ namespace Tryitter.Infra.Repository
 
         public async Task<bool> CreateStudent(Student Student)
         {
-            var query = "INSERT INTO Student (Name, Email, Module, Status, Password) VALUES (@Name, @Email, @Module, @Status, @Password)";
+            var query = "INSERT INTO Student (Name, Email, Module, Status, Password, role) VALUES (@Name, @Email, @Module, @Status, @Password, @role)";
 
             var parameters = new DynamicParameters();
             parameters.Add("Name", Student.Name, DbType.String);
@@ -24,6 +24,7 @@ namespace Tryitter.Infra.Repository
             parameters.Add("Module", Student.Module, DbType.String);
             parameters.Add("Status", Student.Status, DbType.String);
             parameters.Add("Password", Student.Password, DbType.String);
+            parameters.Add("Role", Student.Role, DbType.String);
 
             using (var connection = _context.CreateConnection())
             {

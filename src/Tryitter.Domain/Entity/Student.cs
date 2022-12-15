@@ -14,7 +14,7 @@ namespace Tryitter.Domain.Entity
         public string Role { get; set; }
         public Student() {}
         
-        public Student(string name, string email, string module, string status, string password)
+        public Student(string name, string email, string module, string status, string password, string role)
         {
             Id = Guid.NewGuid();
             Name = name;
@@ -22,6 +22,7 @@ namespace Tryitter.Domain.Entity
             Module = module;
             Status = status;
             Password = password;
+            Role = role;
             
             Validate();
         }
@@ -63,12 +64,15 @@ namespace Tryitter.Domain.Entity
             AddNotifications(contract);
         }
 
-        public void EditInfo(string name, string module, string status, string password)
+        public void EditInfo(Guid id, string name, string email, string module, string status, string password)
         {
+            Id = id;
             Name = name;
+            Email = email;
             Module = module;
             Status = status;
             Password = password;
+            Role = "Student";
             
             Validate();
         }
