@@ -15,7 +15,7 @@ public class ErrorHandlerFilterAttribute : ExceptionFilterAttribute
             Title = exception.Message,
             Status = (int)HttpStatusCode.InternalServerError
         };
-        
+
         context.Result = new ObjectResult(problemDetails);
 
         context.ExceptionHandled = true;

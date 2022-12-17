@@ -7,21 +7,21 @@ namespace Tryitter.Domain.Entity
     {
         public Guid Id { get; set; }
         public string Message { get; set; }
-        
-        public Post() {}
+
+        public Post() { }
         public Post(string message)
         {
             Id = Guid.NewGuid();
             Message = message;
-            
+
             Validate();
         }
-        
+
         public void EditInfo(Guid id, string message)
         {
             Id = id;
             Message = message;
-            
+
             Validate();
         }
 

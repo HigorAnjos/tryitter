@@ -86,7 +86,7 @@ namespace Tryitter.WebApi.Controllers
                 studentBody.Status,
                 studentBody.Password
             );
-            
+
             if (!student.IsValid)
             {
                 var keyErrors = student.Notifications.Aggregate("", (current, studentNotification) => current + (studentNotification.Key + ", "));
@@ -121,7 +121,7 @@ namespace Tryitter.WebApi.Controllers
             {
                 return Problem(statusCode: 403);
             }
-            
+
             await _studentServices.DeleteStudent(id);
             return NoContent();
         }

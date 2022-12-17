@@ -9,7 +9,7 @@ namespace Tryitter.WebApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class AdminController: ControllerBase
+    public class AdminController : ControllerBase
     {
         private readonly IPostServices _postServices;
         private readonly IStudentServices _studentServices;
@@ -25,7 +25,7 @@ namespace Tryitter.WebApi.Controllers
         {
             var students = await _studentServices.GetAllStudents();
             var studentsResponse = new List<object>();
-            foreach(var student in students)
+            foreach (var student in students)
             {
                 studentsResponse.Add(new
                 {
@@ -43,7 +43,7 @@ namespace Tryitter.WebApi.Controllers
         [HttpGet("{id}")]
         [Authorize(policy: "Admin")]
         public async Task<IActionResult> GetById(string id)
-        {   
+        {
             var student = await _studentServices.GetStudent(new Guid(id));
 
             var studentResponse = new StudentResponse(

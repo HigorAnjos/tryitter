@@ -5,15 +5,15 @@ namespace Tryitter.Domain.Entity
 {
     public class Student : Notifiable<Notification>
     {
-        public  Guid Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public string Module { get; set; }
         public string Status { get; set; }
         public string Password { get; set; }
         public string Role { get; set; }
-        public Student() {}
-        
+        public Student() { }
+
         public Student(string name, string email, string module, string status, string password)
         {
             Id = Guid.NewGuid();
@@ -22,10 +22,10 @@ namespace Tryitter.Domain.Entity
             Module = module;
             Status = status;
             Password = password;
-            
+
             Validate();
         }
-        
+
         public Student(Guid id, string name, string email, string module, string status, string password)
         {
             Id = id;
@@ -34,7 +34,7 @@ namespace Tryitter.Domain.Entity
             Module = module;
             Status = status;
             Password = password;
-            
+
             Validate();
         }
 
@@ -69,7 +69,7 @@ namespace Tryitter.Domain.Entity
             Module = module;
             Status = status;
             Password = password;
-            
+
             Validate();
         }
     }

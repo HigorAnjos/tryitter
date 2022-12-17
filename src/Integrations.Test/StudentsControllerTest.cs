@@ -40,7 +40,7 @@ namespace Integrations.Test
         public async Task PostEndpointsReturnSuccess(string url)
         {
             _studentService.Setup(set => set.Register(It.IsAny<Student>())).ReturnsAsync(true);
-            
+
             var student = new Student(
                "Student",
                 "student@gmail.com",
@@ -88,7 +88,7 @@ namespace Integrations.Test
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
-        
+
         [Theory(DisplayName = "E possivel atualizar os dados do studante logado")]
         [InlineData("/student")]
         public async Task PutUpdateSuccess(string url)
@@ -100,28 +100,28 @@ namespace Integrations.Test
                 "Testando endpoint",
                 "12345"
             );
-            
+
             var token = new TokenGenerate().GetToken(student);
 
             _studentService.Setup(set => set.UpdateStudent(It.IsAny<Student>())).ReturnsAsync(student);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            
+
             var studentJson = JsonConvert.SerializeObject(student);
             var requestContent = new StringContent(studentJson, Encoding.UTF8, "application/json");
-            
+
             var response = await _client.PutAsync(url, requestContent);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
-        
+
         [Theory(DisplayName = "E possivel deletar a conta do estudante passado por parametro")]
         [InlineData("/student")]
         public async Task DeleteSuccess(string url)
         {
             var student = AutoFaker.Generate<Student>();
-            
+
             var token = new TokenGenerate().GetToken(student);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            
+
             _studentService.Setup(set => set.DeleteStudent(It.IsAny<Guid>())).ReturnsAsync(true);
 
             var deleteResponse = await _client.DeleteAsync($"{url}/{student.Id}");

@@ -16,7 +16,7 @@ namespace Tryitter.Infra.Repository
         public async Task<Post> CreatePost(Post ToCreate, Guid StudentId)
         {
             var query = "INSERT INTO Post (Message, Student_Id) OUTPUT INSERTED.Id VALUES (@Message, @StudentId)";
-            
+
             var parameters = new DynamicParameters();
             parameters.Add("Message", ToCreate.Message, DbType.String);
             parameters.Add("StudentId", StudentId, DbType.Guid);
@@ -55,7 +55,7 @@ namespace Tryitter.Infra.Repository
         public async Task<Post> GetPostById(Guid PostId, Guid StudentId)
         {
             var query = "SELECT * FROM Post Where Student_Id = @StudentId AND Id = @PostId";
-            
+
             var parameters = new DynamicParameters();
             parameters.Add("PostId", PostId, DbType.Guid);
             parameters.Add("StudentId", StudentId, DbType.Guid);
