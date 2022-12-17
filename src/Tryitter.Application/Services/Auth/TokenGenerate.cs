@@ -20,7 +20,7 @@ namespace Tryitter.Application.Services.Auth
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(Encoding.ASCII.GetBytes(TokenConstantesSecret)),
                     SecurityAlgorithms.HmacSha256Signature
-               
+
                 ),
                 Expires = DateTime.Now.AddDays(1),
                 Claims = new Dictionary<string, Object>(),

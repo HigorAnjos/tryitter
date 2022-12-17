@@ -15,7 +15,7 @@ using Tryitter.WebApi.Responses;
 
 namespace Integrations.Test
 {
-    public class AdminControllerTest: IClassFixture<WebApplicationFactory<Program>>
+    public class AdminControllerTest : IClassFixture<WebApplicationFactory<Program>>
     {
         private readonly HttpClient _client;
         private readonly Mock<IStudentServices> _studentService;
@@ -25,8 +25,10 @@ namespace Integrations.Test
             _studentService = new Mock<IStudentServices>();
             _postServices = new Mock<IPostServices>();
 
-            _client = factory.WithWebHostBuilder(builder => {
-                builder.ConfigureServices(services => {
+            _client = factory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureServices(services =>
+                {
                     services.AddScoped<IStudentServices>(st => _studentService.Object);
                     services.AddScoped<IPostServices>(st => _postServices.Object);
                 });

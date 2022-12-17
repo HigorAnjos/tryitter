@@ -101,7 +101,7 @@ namespace Tryitter.Infra.Repository
         {
             var query = "SELECT Id, Name, Email, Module, Status, role FROM Student";
 
-            using(var connection = _context.CreateConnection())
+            using (var connection = _context.CreateConnection())
             {
                 var students = await connection.QueryAsync<Student>(query);
                 return students;

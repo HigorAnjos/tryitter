@@ -51,7 +51,7 @@ namespace Tryitter.Application.Services
 
             return studentFound;
         }
-        
+
         public async Task<Student> UpdateStudent(Student student)
         {
             var studentFound = await _studentRepository.GetStudentById(student.Id);
