@@ -15,3 +15,7 @@ O projeto conta com testes unitários e de integração.
 
 # Aplicação
 O deploy da aplicação foi feito no Azure e está disponível neste link: https://tryitter01.azurewebsites.net/swagger/index.html
+
+# Tecnologias
+
+[Dotnet format](https://github.com/dotnet/format)
