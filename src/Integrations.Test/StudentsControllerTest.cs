@@ -94,11 +94,13 @@ namespace Integrations.Test
         public async Task PutUpdateSuccess(string url)
         {
             var student = new Student(
-                "Student",
+                "Student Name",
                 "student@gmail.com",
                 "CS",
                 "Testando endpoint",
-                "12345"
+                "12345",
+                "Student"
+
             );
 
             var token = new TokenGenerate().GetToken(student);
